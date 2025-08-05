@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore | Itly </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+        * {
+
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            background-color: rgb(0, 24, 23);
+            height: 50px;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navdiv1 {
+            margin-left: 100px;
+            color: white;
+            font-size: x-large;
+            font-family: "Jost";
+        }
+
+        .navdiv2 {
+            font-size: large;
+            font-family: "Jost";
+            margin-right: 100px;
+
+        }
+
+        .navdiv2>a {
+            margin: 15px;
+            text-decoration: none;
+            color: rgb(255, 255, 255);
+            padding: 5px 10px;
+        }
+
+        .navdiv2>a:hover {
+            margin: 15px;
+            background-color: rgb(0, 70, 67);
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        .hero {
+            position: relative;
+            height: 90vh;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            color: rgb(0, 24, 23);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 50;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-image: url(/website/assets/Venice.avif);
+            background-size: cover;
+            background-position: left;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .sec1div {
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sec1div1 {
+            width: 50vh;
+        }
+
+        .sec1div2 {
+            width: 50vh;
+        }
+
+        .sec1div2 {
+            position: relative;
+            height: 200vh;
+        }
+
+        /* Common image styles */
+        .sec1div2 img {
+            position: absolute;
+            border-radius: 20px;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.6);
+            /* darker and more visible */
+        }
+
+        /* Individual image positioning */
+        .img-top {
+            height: 300px;
+            top: 100vh;
+            z-index: 3;
+        }
+
+        .img-middle {
+            height: 250px;
+            top: 70vh;
+            left: 30vh;
+            z-index: 2;
+        }
+
+        .img-back {
+            height: 350px;
+            top: 130vh;
+            left: 10vh;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="navdiv1">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAABNCAMAAABAMbBwAAAAFVBMVEX///8AkkbOKzcAjz53tYrdf4PNHy6+dV0FAAAAQElEQVRoge3NNwEAMAADoHT6l1wL+fqAATIaa6dy7mxEKpVKpVKpVCqVSqVSqVQqlUqlUqlUKpVKpVKpVCr9lD41QibO+D+22AAAAABJRU5ErkJggg=="
+                alt="" height="25px" width="45px">
+            <span>Itly Tourism</span>
+        </div>
+        <div class="navdiv2">
+            <a rel="stylesheet" href="">About</a>
+            <a rel="stylesheet" href="">Contact</a>
+            <a rel="stylesheet" href="">Highlights</a>
+            <a rel="stylesheet" href="">Facilities</a>
+            <a rel="stylesheet" href="">Signup</a>
+        </div>
+    </nav>
+
+    <!-- HERO SEC -->
+    <div class="hero">
+        <h3>WELCOME TO ITLY</h3>
+    </div>
+
+    <!-- SEC 1 -->
+    <div class="sec1div">
+        <div class="sec1div1">
+            <h2>Italian Travel Experiences That Feel Like You</h2>
+        </div>
+        <div class="sec1div2">
+            <img src="/website/assets/Amalfi_Coast.avif" alt="Amalfi Coast" class="img-top">
+            <img src="/website/assets/Tuscany.avif" alt="Tuscany" class="img-back">
+            <img src="/website/assets/Naples.avif" alt="Naples" class="img-middle">
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>
