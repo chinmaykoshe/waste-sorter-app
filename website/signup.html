@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Itly Tourism</title>
+    <title>Signup | Itly Tourism</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -51,27 +51,42 @@
             border-radius: 10px;
         }
 
-        .about-section {
+        .signup-section {
             padding: 80px 100px;
             background-color: white;
         }
 
-        .about-section h1 {
+        .signup-section h1 {
             font-size: 60px;
             margin-bottom: 30px;
         }
 
-        .about-section p {
-            font-size: 20px;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
         }
 
-        .about-img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 10px 10px 10px rgb(0, 70, 67);
-            margin-top: 40px;
+        input, select {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid rgb(0, 70, 67);
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            background-color: rgb(0, 70, 67);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(0, 100, 95);
         }
 
         footer {
@@ -103,12 +118,25 @@
         </div>
     </nav>
 
-    <div class="about-section">
-        <h1>About Itly Tourism</h1>
-        <p>At Itly Tourism, we believe travel is more than just visiting places—it's about experiencing culture, history, and the soul of a destination. Our mission is to help you explore Italy in ways that feel personal, immersive, and unforgettable.</p>
-        <p>From the romantic canals of Venice to the sun-kissed Amalfi Coast, we curate travel experiences that blend luxury, authenticity, and adventure. Whether you're a solo traveler, a couple seeking romance, or a family looking for fun, Italy has something for everyone.</p>
-        <p>We partner with local guides, chefs, and artisans to bring you the best of Italian hospitality. Our platform offers curated itineraries, accommodation options, and insider tips to make your journey seamless and memorable.</p>
-        <img src="./assets/aboutitly.jpg" alt="About Italy" class="about-img">
+    <div class="signup-section">
+        <h1>Create Your Travel Account</h1>
+        <form>
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="password" placeholder="Create Password" required>
+            <select required>
+                <option value="">Select Travel Interest</option>
+                <option value="culture">Culture & History</option>
+                <option value="food">Food & Wine</option>
+                <option value="nature">Nature & Adventure</option>
+                <option value="luxury">Luxury & Relaxation</option>
+            </select>
+            <button type="submit">Sign Up</button>
+            <div style="font-size: x-large;">
+                <p>Already have an account? <a href="/login.html">Login here</a></p>
+            </div>
+            
+        </form>
     </div>
 
     <footer>
