@@ -18,66 +18,88 @@
             font-family: "Jost", sans-serif;
             background-color: rgb(240, 255, 255);
             color: rgb(0, 24, 23);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* Navbar */
         .nav {
             background-color: rgb(0, 24, 23);
-            height: 50px;
-            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 20px;
+            flex-wrap: wrap;
         }
 
         .navdiv1 {
-            margin-left: 100px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             color: white;
-            font-size: x-large;
+            font-size: 1.3rem;
+            padding: 10px 0;
+        }
+
+        .navdiv1 a {
+            text-decoration: none;
+            color: white;
         }
 
         .navdiv2 {
-            margin-right: 100px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 10px 0;
         }
 
-        .navdiv2>a {
-            margin: 15px;
+        .navdiv2 a {
             text-decoration: none;
             color: white;
             padding: 5px 10px;
         }
 
-        .navdiv2>a:hover {
+        .navdiv2 a:hover {
             background-color: rgb(0, 70, 67);
             border-radius: 10px;
         }
 
+        /* Signup Section */
         .signup-section {
-            padding: 80px 100px;
+            flex: 1;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px 30px;
             background-color: white;
+            border-radius: 15px;
+            box-shadow: 10px 10px 20px rgb(0, 70, 67);
         }
 
         .signup-section h1 {
-            font-size: 60px;
+            font-size: 2.5rem;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         form {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 600px;
         }
 
-        input, select {
+        input,
+        select {
             padding: 15px;
-            font-size: 18px;
+            font-size: 1rem;
             border: 1px solid rgb(0, 70, 67);
             border-radius: 10px;
+            width: 100%;
         }
 
         button {
             padding: 15px;
-            font-size: 18px;
+            font-size: 1rem;
             background-color: rgb(0, 70, 67);
             color: white;
             border: none;
@@ -89,16 +111,63 @@
             background-color: rgb(0, 100, 95);
         }
 
+        .signup-link {
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .signup-link a {
+            color: rgb(0, 70, 67);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Footer */
         footer {
             background-color: rgb(0, 24, 23);
             color: white;
             padding: 20px;
             text-align: center;
+            margin-top: auto;
         }
 
         footer a {
             color: white;
             text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .signup-section {
+                margin: 30px 20px;
+                padding: 30px 20px;
+            }
+
+            .signup-section h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signup-section {
+                margin: 20px 10px;
+                padding: 25px 15px;
+            }
+
+            .signup-section h1 {
+                font-size: 1.7rem;
+            }
+
+            input,
+            select,
+            button {
+                font-size: 0.95rem;
+                padding: 12px;
+            }
+
+            .signup-link {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -106,15 +175,16 @@
 <body>
     <nav class="nav">
         <div class="navdiv1">
-            <img src="./assets/download.png" alt="Logo" height="25px" width="45px">
-            <span><a href="/index.html" style="text-decoration: none; color: white;">Itly Tourism</a></span>
-        </div> 
+            <img src="./assets/download.png" alt="Logo" height="25" width="45">
+            <span><a href="/index.html">Itly Tourism</a></span>
+        </div>
+
         <div class="navdiv2">
-            <a rel="stylesheet" href="/aboutus.html">About</a>
-            <a rel="stylesheet" href="/contact.html">Contact</a>
-            <a rel="stylesheet" href="/highlight.html">Highlights</a>
-            <a rel="stylesheet" href="/facilites.html">Facilities</a>
-            <a rel="stylesheet" href="/signup.html">Signup</a>
+            <a href="/aboutus.html">About</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/highlight.html">Highlights</a>
+            <a href="/facilites.html">Facilities</a>
+            <a href="/signup.html">Signup</a>
         </div>
     </nav>
 
@@ -132,10 +202,9 @@
                 <option value="luxury">Luxury & Relaxation</option>
             </select>
             <button type="submit">Sign Up</button>
-            <div style="font-size: x-large;">
+            <div class="signup-link">
                 <p>Already have an account? <a href="/login.html">Login here</a></p>
             </div>
-            
         </form>
     </div>
 

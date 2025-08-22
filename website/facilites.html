@@ -20,58 +20,73 @@
             color: rgb(0, 24, 23);
         }
 
+        /* Navbar */
         .nav {
             background-color: rgb(0, 24, 23);
-            height: 50px;
-            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 20px;
+            flex-wrap: wrap;
         }
 
         .navdiv1 {
-            margin-left: 100px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             color: white;
-            font-size: x-large;
+            font-size: 1.3rem;
+            padding: 10px 0;
+        }
+
+        .navdiv1 a {
+            text-decoration: none;
+            color: white;
         }
 
         .navdiv2 {
-            margin-right: 100px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 10px 0;
         }
 
-        .navdiv2>a {
-            margin: 15px;
+        .navdiv2 a {
             text-decoration: none;
             color: white;
             padding: 5px 10px;
         }
 
-        .navdiv2>a:hover {
+        .navdiv2 a:hover {
             background-color: rgb(0, 70, 67);
             border-radius: 10px;
         }
 
+        /* Facilities Section */
         .facilities-section {
-            padding: 80px 100px;
+            padding: 60px 20px;
             background-color: white;
+            max-width: 1200px;
+            margin: auto;
         }
 
         .facilities-section h1 {
-            font-size: 60px;
+            font-size: 2.5rem;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .facility-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
         }
 
         .facility-card {
             background-color: rgb(240, 255, 255);
             border-radius: 20px;
             box-shadow: 10px 10px 10px rgb(0, 70, 67);
-            padding: 20px;
+            padding: 15px;
             transition: transform 0.5s ease;
         }
 
@@ -80,13 +95,21 @@
         }
 
         .facility-card h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 1.3rem;
+            margin: 10px 0;
         }
 
         .facility-card p {
-            font-size: 16px;
+            font-size: 1rem;
             line-height: 1.5;
+        }
+
+        .facility-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 10px;
         }
 
         footer {
@@ -100,68 +123,113 @@
             color: white;
             text-decoration: none;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navdiv2 {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .navdiv2 a {
+                width: 100%;
+                padding: 10px 0;
+            }
+
+            .facilities-section h1 {
+                font-size: 2rem;
+            }
+
+            .facility-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .facility-card p {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .facilities-section h1 {
+                font-size: 1.7rem;
+            }
+
+            .facility-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .facility-card p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <nav class="nav">
         <div class="navdiv1">
-            <img src="./assets/download.png" alt="Logo" height="25px" width="45px">
-            <span><a href="/index.html" style="text-decoration: none; color: white;">Itly Tourism</a></span>
-        </div> 
+            <img src="./assets/download.png" alt="Logo" height="25" width="45">
+            <span><a href="/index.html">Itly Tourism</a></span>
+        </div>
+
         <div class="navdiv2">
-            <a rel="stylesheet" href="/aboutus.html">About</a>
-            <a rel="stylesheet" href="/contact.html">Contact</a>
-            <a rel="stylesheet" href="/highlight.html">Highlights</a>
-            <a rel="stylesheet" href="/facilites.html">Facilities</a>
-            <a rel="stylesheet" href="/signup.html">Signup</a>
+            <a href="/aboutus.html">About</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/highlight.html">Highlights</a>
+            <a href="/facilites.html">Facilities</a>
+            <a href="/signup.html">Signup</a>
         </div>
     </nav>
 
     <div class="facilities-section">
         <h1>Travel Facilities We Offer</h1>
         <div class="facility-grid">
-    <div class="facility-card">
-        <img src="./assets/airport.jpg" alt="Airport Transfers" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Airport Transfers</h3>
-        <p>Enjoy hassle-free pickup and drop-off services from major airports across Italy.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/transport.jpg" alt="Local Transportation" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Local Transportation</h3>
-        <p>Access rental cars, scooters, and public transport passes to explore cities with ease.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/guided_tour.jpg" alt="Guided Tours" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Guided Tours</h3>
-        <p>Join expert-led tours covering historical landmarks, food trails, and hidden gems.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/language_support.jpg" alt="Multilingual Support" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Multilingual Support</h3>
-        <p>Travel confidently with guides and staff fluent in English, Italian, and other languages.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/accessibility.jpg" alt="Accessibility Services" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Accessibility Services</h3>
-        <p>We offer wheelchair-friendly accommodations, transport, and guided experiences.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/insurance.jpg" alt="Travel Insurance" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Travel Insurance Assistance</h3>
-        <p>Get help choosing the right travel insurance for peace of mind during your trip.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/customiternities.png" alt="Custom Itineraries" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Custom Itineraries</h3>
-        <p>Let us tailor your travel plan based on your interests, budget, and schedule.</p>
-    </div>
-    <div class="facility-card">
-        <img src="./assets/emergency.jpg" alt="Emergency Support" style="width: 100%; height: 180px; object-fit: cover; border-radius: 15px;">
-        <h3>Emergency Support</h3>
-        <p>24/7 helpline for medical, legal, or travel-related emergencies while you're in Italy.</p>
-    </div>
-</div>
+            <div class="facility-card">
+                <img src="./assets/airport.jpg" alt="Airport Transfers">
+                <h3>Airport Transfers</h3>
+                <p>Enjoy hassle-free pickup and drop-off services from major airports across Italy.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/transport.jpg" alt="Local Transportation">
+                <h3>Local Transportation</h3>
+                <p>Access rental cars, scooters, and public transport passes to explore cities with ease.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/guided_tour.jpg" alt="Guided Tours">
+                <h3>Guided Tours</h3>
+                <p>Join expert-led tours covering historical landmarks, food trails, and hidden gems.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/language_support.jpg" alt="Multilingual Support">
+                <h3>Multilingual Support</h3>
+                <p>Travel confidently with guides and staff fluent in English, Italian, and other languages.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/accessibility.jpg" alt="Accessibility Services">
+                <h3>Accessibility Services</h3>
+                <p>We offer wheelchair-friendly accommodations, transport, and guided experiences.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/insurance.jpg" alt="Travel Insurance">
+                <h3>Travel Insurance Assistance</h3>
+                <p>Get help choosing the right travel insurance for peace of mind during your trip.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/customiternities.png" alt="Custom Itineraries">
+                <h3>Custom Itineraries</h3>
+                <p>Let us tailor your travel plan based on your interests, budget, and schedule.</p>
+            </div>
+            <div class="facility-card">
+                <img src="./assets/emergency.jpg" alt="Emergency Support">
+                <h3>Emergency Support</h3>
+                <p>24/7 helpline for medical, legal, or travel-related emergencies while you're in Italy.</p>
+            </div>
+        </div>
     </div>
 
     <footer>
