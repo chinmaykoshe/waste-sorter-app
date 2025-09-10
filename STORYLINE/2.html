@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday My Love — Our Story</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    body { 
+      font-family: 'Inter', system-ui, sans-serif; 
+      -webkit-font-smoothing: antialiased; 
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .chapter {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+    }
+
+    /* Curtain Overlay */
+    .curtain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      z-index: 9999;
+      transform-origin: left center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .curtain-text {
+      color: white;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 300;
+      text-align: center;
+      opacity: 0.8;
+      letter-spacing: 2px;
+    }
+
+    .curtain-sparkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .curtain-sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Interactive Elements */
+    .interactive-element {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .interactive-element:hover {
+      transform: translateY(-5px) scale(1.02);
+    }
+
+    /* Hero Chapter Styling */
+    .hero-chapter {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 30%, #ec4899 60%, #f97316 100%);
+      position: relative;
+    }
+
+    .hero-chapter::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Floating romantic particles */
+    .hero-chapter::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 40% 70%, rgba(255,182,193,0.4), transparent),
+        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 80% 10%, rgba(255,182,193,0.4), transparent);
+      background-repeat: repeat;
+      background-size: 100px 100px, 80px 80px, 120px 120px, 90px 90px;
+      animation: sparkleFloat 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sparkleFloat {
+      0% { transform: translateY(0px) translateX(0px); }
+      100% { transform: translateY(-100px) translateX(50px); }
+    }
+
+    /* Story Header */
+    .story-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .story-title {
+      font-size: clamp(2.5rem, 8vw, 3rem);
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin: 0;
+      line-height: 0.9;
+    }
+
+    .story-subtitle {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin: 5px 0 0 0;
+      line-height: 1;
+    }
+
+    .instagram-handle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+    }
+
+    /* Interactive Love Progress Bar */
+    .love-progress-container {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 30px;
+      padding: 20px;
+      text-align: center;
+      z-index: 10;
+      touch-action: none;
+    }
+
+    .love-meter-label {
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 15px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 25px;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6b9d, #ffeaa7, #fd79a8, #ff6b9d);
+      background-size: 200% 100%;
+      border-radius: 25px;
+      width: 0%;
+      position: relative;
+      transition: width 0.3s ease;
+      animation: gradientShift 3s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .progress-handle {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 25px;
+      height: 25px;
+      background: white;
+      border-radius: 50%;
+      cursor: grab;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .progress-handle:active {
+      cursor: grabbing;
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    .love-percentage {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    /* Enhanced Birthday Celebration */
+    .birthday-celebration {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .birthday-text {
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #ff6b9d, #ffeaa7, #fd79a8, #ff6b9d);
+      background-size: 300% 300%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(255, 107, 157, 0.6));
+    }
+
+    @keyframes gradientAnimation {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .birthday-subtitle {
+      font-size: clamp(1rem, 4vw, 1.5rem);
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
+      margin-top: 10px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Popper Emojis */
+    .popper-left, .popper-right {
+      position: absolute;
+      font-size: clamp(3rem, 8vw, 5rem);
+      z-index: 25;
+      opacity: 0;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+    }
+
+    .popper-left {
+      left: 10%;
+      top: 35%;
+    }
+
+    .popper-right {
+      right: 10%;
+      top: 35%;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      pointer-events: none;
+      z-index: 30;
+      border-radius: 2px;
+    }
+
+    .confetti-1 { background: #ff6b9d; }
+    .confetti-2 { background: #ffeaa7; }
+    .confetti-3 { background: #fd79a8; }
+    .confetti-4 { background: #74b9ff; }
+    .confetti-5 { background: #55a3ff; }
+
+    /* Main Couple Image */
+    .couple-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      max-width: 400px;
+      height: 280px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      z-index: 5;
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+
+    .couple-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Character Labels */
+    .character-label {
+      position: absolute;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 8px 20px;
+      color: white;
+      font-weight: 500;
+      font-size: clamp(14px, 4vw, 16px);
+      z-index: 15;
+      animation: floatLabel 4s ease-in-out infinite;
+      cursor: pointer;
+    }
+
+    .character-left {
+      top: 20%;
+      left: 15px;
+      animation-delay: 0s;
+    }
+
+    .character-right {
+      top: 70%;
+      right: 15px;
+      animation-delay: 2s;
+    }
+
+    @keyframes floatLabel {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* Love Quote */
+    .love-quote {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85%;
+      max-width: 350px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 15px;
+      padding: 18px;
+      color: rgba(255,255,255,0.95);
+      font-size: clamp(13px, 4vw, 14px);
+      line-height: 1.6;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .quote-text {
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .quote-author {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    /* Romantic Icons */
+    .romantic-icons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-icon {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0.3;
+      animation: iconFloat 8s ease-in-out infinite;
+    }
+
+    .floating-icon:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+    .floating-icon:nth-child(2) { top: 25%; right: 15%; animation-delay: 2s; }
+    .floating-icon:nth-child(3) { top: 40%; left: 8%; animation-delay: 4s; }
+    .floating-icon:nth-child(4) { top: 60%; right: 12%; animation-delay: 6s; }
+    .floating-icon:nth-child(5) { bottom: 30%; left: 12%; animation-delay: 1s; }
+    .floating-icon:nth-child(6) { bottom: 20%; right: 10%; animation-delay: 3s; }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.6; }
+    }
+
+    /* Rest of the styles for other chapters... */
+    .chapter-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .chapter-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .chapter-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .chapter-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .chapter-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    .chapter-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+    .chapter-7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+
+    .chapter-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: white;
+      z-index: 10;
+    }
+
+    .chapter-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      line-height: 1.2;
+      cursor: pointer;
+    }
+
+    .chapter-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.95);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .chapter-image {
+      width: 100%;
+      max-width: 320px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin: 20px auto;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .chapter-image:hover {
+      transform: scale(1.05) rotate(2deg);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .birthday-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      position: relative;
+    }
+
+    .birthday-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      color: white;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .birthday-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      line-height: 1.1;
+    }
+
+    .birthday-message {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .final-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+
+    .final-text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 20px;
+    }
+
+    .signature {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      font-style: italic;
+      margin-top: 25px;
+    }
+
+    /* Heart Balloons */
+    .heart-balloon {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.5rem;
+      z-index: 1000;
+      animation: floatUp 3s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        scale: 0.5;
+      }
+      100% {
+        transform: translateY(-200px) rotate(360deg);
+        opacity: 0;
+        scale: 1.2;
+      }
+    }
+
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 1.2rem;
+      animation: floatHeart 6s infinite ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .sparkle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sparkle 2s infinite ease-in-out;
+      z-index: 50;
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+      }
+    }
+
+    #musicBtn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 25px;
+      padding: 8px 15px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      font-size: 13px;
+    }
+
+    #musicBtn:hover {
+      background: rgba(0,0,0,0.8);
+      transform: scale(1.05) translateY(-2px);
+    }
+
+    .scroll-indicator {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+      text-align: center;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      40% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+      60% {
+        transform: translateX(-50%) translateY(-5px);
+      }
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      will-change: transform;
+    }
+
+    .parallax-element {
+      will-change: transform;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .love-progress-container {
+        width: 95%;
+        padding: 15px;
+      }
+      .progress-track {
+        height: 12px;
+      }
+      .progress-handle {
+        width: 20px;
+        height: 20px;
+        right: -6px;
+      }
+      .couple-container {
+        height: 240px;
+      }
+      .character-label {
+        padding: 6px 16px;
+      }
+      .love-quote {
+        padding: 16px;
+      }
+      .popper-left {
+        left: 5%;
+      }
+      .popper-right {
+        right: 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Curtain Overlay -->
+  <div class="curtain-overlay" id="curtainOverlay">
+    <div class="curtain-sparkles" id="curtainSparkles"></div>
+    <div class="curtain-text">
+      Opening our love story...
+    </div>
+  </div>
+
+  <!-- Music Control -->
+  <div id="musicBtn" class="interactive-element">
+    <svg id="musicIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+    </svg>
+    <span id="musicLabel">Play</span>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator interactive-element" id="scrollIndicator">
+    <div>⬇️</div>
+    <div>Swipe or scroll to explore</div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bgAudio" src="https://cdn.pixabay.com/download/audio/2023/07/24/audio_b9f6a9f3c0.mp3?filename=soft-piano-16598.mp3" preload="none" loop></audio>
+
+  <!-- Hero Chapter (Clean with Interactive Progress) -->
+  <section class="chapter hero-chapter">
+    <div class="parallax-bg parallax-element"></div>
+    
+    <!-- Romantic floating icons -->
+    <div class="romantic-icons">
+      <div class="floating-icon">💕</div>
+      <div class="floating-icon">✨</div>
+      <div class="floating-icon">💫</div>
+      <div class="floating-icon">🌟</div>
+      <div class="floating-icon">💖</div>
+      <div class="floating-icon">🎈</div>
+    </div>
+    
+    <!-- Story Header -->
+    <div class="story-header">
+      <h1 class="story-title interactive-element">Our Love</h1>
+      <h2 class="story-subtitle interactive-element">Story</h2>
+      <div class="instagram-handle interactive-element">@our.beautiful.journey</div>
+    </div>
+
+    <!-- Interactive Love Progress Bar -->
+    <div class="love-progress-container interactive-element">
+      <div class="love-meter-label">Drag to fill our love ❤️</div>
+      <div class="progress-track" id="progressTrack">
+        <div class="progress-fill" id="progressFill">
+          <div class="progress-handle" id="progressHandle"></div>
+        </div>
+      </div>
+      <div class="love-percentage" id="lovePercentage">0%</div>
+    </div>
+
+    <!-- Character Labels -->
+    <div class="character-label character-left interactive-element">Alex</div>
+    <div class="character-label character-right interactive-element">Sarah</div>
+
+    <!-- Main Couple Image -->
+    <div class="couple-container interactive-element parallax-element">
+      <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&h=280&fit=crop" 
+           alt="Our Love Story" 
+           class="couple-image"
+           onerror="this.style.background='linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'; this.src='';">
+    </div>
+
+    <!-- Enhanced Birthday Celebration -->
+    <div class="birthday-celebration" id="birthdayCelebration">
+      <div class="birthday-text" id="birthdayText">Happy Birthday Love ❤️</div>
+      <div class="birthday-subtitle" id="birthdaySubtitle">You make every day magical ✨</div>
+    </div>
+
+    <!-- Popper Emojis -->
+    <div class="popper-left" id="popperLeft">🎉</div>
+    <div class="popper-right" id="popperRight">🎊</div>
+
+    <!-- Love Quote -->
+    <div class="love-quote interactive-element">
+      <div class="quote-text">"Every love story is beautiful, but ours is my favorite."</div>
+      <div class="quote-author">— Our Journey Together</div>
+    </div>
+  </section>
+
+  <!-- Chapter 1: How We Met -->
+  <section class="chapter chapter-1">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">🌟 How We First Met</h2>
+      <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=320&h=200&fit=crop" 
+           alt="How We Met" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        It was a Tuesday morning when our eyes first met across the college campus. You were sitting by the library steps, reading a book with such concentration that the world seemed to pause around you. I remember thinking how beautiful you looked in that moment - completely lost in your own little world. Little did I know that you would soon become my entire world.
+      </p>
+      <p class="chapter-text interactive-element">
+        When you looked up and smiled, something changed forever. That simple "hello" became the beginning of the most beautiful story I've ever been part of. Some people say love at first sight is just a myth, but I believe they've never experienced the magic we felt that day.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 2: Our First Date -->
+  <section class="chapter chapter-2">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">☕ Our First Date</h2>
+      <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=320&h=200&fit=crop" 
+           alt="First Date" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        I was so nervous asking you out for coffee. My hands were shaking as I approached you after class, and I probably rehearsed what to say a hundred times in my head. But when you said yes with that radiant smile, all my fears melted away like sugar in warm coffee.
+      </p>
+      <p class="chapter-text interactive-element">
+        We talked for hours at that little café downtown. Time seemed to stand still as we shared stories, dreams, and laughed until our cheeks hurt. I knew then that I wanted to spend every possible moment getting to know the incredible person sitting across from me. That first date lasted until the café closed, and even then, we didn't want the evening to end.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 3: When I Fell in Love -->
+  <section class="chapter chapter-3">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">💙 When I Knew I Loved You</h2>
+      <img src="https://images.unsplash.com/photo-1518049362265-d5b2a6467637?w=320&h=200&fit=crop" 
+           alt="Falling in Love" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        It wasn't a dramatic movie moment or a grand gesture. It was a quiet Tuesday evening when you were sick with the flu. I had brought you soup and medicine, and you looked at me with such gratitude and love in your eyes. In that moment, taking care of you felt like the most natural thing in the world.
+      </p>
+      <p class="chapter-text interactive-element">
+        That's when I realized - love isn't just the butterflies and excitement. It's wanting to be there for someone when they're at their most vulnerable. It's finding joy in the mundane moments and choosing each other every single day. That night, I knew with absolute certainty that I wanted to love you for the rest of my life.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 4: Our Adventures -->
+  <section class="chapter chapter-4">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">🌍 Our Adventures Together</h2>
+      <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=320&h=200&fit=crop" 
+           alt="Adventures" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        From spontaneous road trips to planned vacations, from hiking trails to beach sunsets - every adventure with you has been a treasure. Remember our first trip together when we got lost for three hours but laughed the entire time? Or that rainy day when we danced in the street without caring who was watching?
+      </p>
+      <p class="chapter-text interactive-element">
+        You've taught me that adventure isn't about the destination; it's about who you're with. Whether we're exploring a new city or just trying a new restaurant in our neighborhood, every moment with you feels like a beautiful discovery. You make ordinary days feel extraordinary just by being yourself.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 5: Why You're Amazing -->
+  <section class="chapter chapter-5">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">✨ Why You're So Special</h2>
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=320&h=200&fit=crop" 
+           alt="Your Beauty" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        Your kindness radiates from within and touches everyone around you. I've watched you help strangers, comfort friends, and show compassion even when you're having a difficult day. Your empathy and generosity inspire me to be a better person every single day.
+      </p>
+      <p class="chapter-text interactive-element">
+        But it's not just your beautiful heart that amazes me. It's your brilliant mind, your infectious laugh, the way your eyes light up when you talk about your passions, and how you make everyone feel special and heard. You are a rare and precious soul, and I feel incredibly lucky to call you mine.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 6: My Gratitude -->
+  <section class="chapter chapter-6">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="chapter-content">
+      <h2 class="chapter-title interactive-element">🙏 How Grateful I Am</h2>
+      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=320&h=200&fit=crop" 
+           alt="Gratitude" 
+           class="chapter-image interactive-element"
+           onerror="this.style.background='rgba(255,255,255,0.1)'; this.src='';">
+      <p class="chapter-text interactive-element">
+        Every day I wake up amazed that I get to love you and be loved by you. You've brought so much joy, peace, and meaning into my life that I sometimes wonder what I did to deserve someone as wonderful as you. Your love has healed parts of me I didn't even know were broken.
+      </p>
+      <p class="chapter-text interactive-element">
+        Thank you for believing in me when I didn't believe in myself, for celebrating my victories as if they were your own, and for holding me close during my darkest moments. Thank you for choosing us, for your patience, and for the million little ways you show me love every single day.
+      </p>
+    </div>
+  </section>
+
+  <!-- Chapter 7: Happy Birthday Message -->
+  <section class="chapter birthday-section">
+    <div class="parallax-bg parallax-element"></div>
+    <div class="birthday-content">
+      <h2 class="birthday-title interactive-element">🎉 Happy Birthday, My Love!</h2>
+      
+      <div class="birthday-message interactive-element">
+        <div class="final-title">Today Is Your Special Day</div>
+        <p class="final-text">
+          As I reflect on our beautiful journey together, I'm filled with so much love and gratitude for having you in my life. Today, we celebrate not just another year of your amazing existence, but all the joy, laughter, and love you bring into this world.
+        </p>
+        <p class="final-text">
+          You are my best friend, my greatest love, and my favorite person to share life's adventures with. Every moment we've shared has been a gift, and I look forward to creating countless more beautiful memories together.
+        </p>
+        <p style="font-size: 18px; font-weight: 600; color: white; margin-top: 25px;">
+          Happy Birthday, Beautiful! Here's to another year of our incredible love story! ❤️🎂✨
+        </p>
+        
+        <div class="signature">
+          Forever yours, with all my love<br>
+          Your devoted partner ❤️<br>
+          <small>Created with love • 2024</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Register GSAP plugins
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Curtain Animation on Page Load
+    window.addEventListener('load', () => {
+      const curtainOverlay = document.getElementById('curtainOverlay');
+      const curtainSparkles = document.getElementById('curtainSparkles');
+      
+      // Create sparkles for curtain
+      for (let i = 0; i < 20; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'curtain-sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        curtainSparkles.appendChild(sparkle);
+      }
+
+      // Curtain opening animation
+      gsap.timeline()
+        .to(curtainOverlay, {
+          duration: 3,
+          scaleX: 0,
+          transformOrigin: "left center",
+          ease: "power2.inOut",
+          onComplete: () => {
+            curtainOverlay.remove();
+            // Start main animations after curtain opens
+            startMainAnimations();
+          }
+        });
+    });
+
+    // Interactive Progress Bar
+    const progressTrack = document.getElementById('progressTrack');
+    const progressFill = document.getElementById('progressFill');
+    const progressHandle = document.getElementById('progressHandle');
+    const lovePercentage = document.getElementById('lovePercentage');
+    const birthdayCelebration = document.getElementById('birthdayCelebration');
+    const birthdayText = document.getElementById('birthdayText');
+    const birthdaySubtitle = document.getElementById('birthdaySubtitle');
+    const popperLeft = document.getElementById('popperLeft');
+    const popperRight = document.getElementById('popperRight');
+
+    let isProgressDragging = false;
+    let currentProgress = 0;
+    let celebrationTriggered = false;
+
+    // Create enhanced confetti
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = `confetti confetti-${Math.floor(Math.random() * 5) + 1}`;
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = '-10px';
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(confetti);
+
+          gsap.to(confetti, {
+            y: window.innerHeight + 100,
+            x: (Math.random() - 0.5) * 300,
+            rotation: Math.random() * 720,
+            duration: Math.random() * 4 + 3,
+            ease: "none",
+            onComplete: () => {
+              if (confetti && confetti.parentNode) {
+                confetti.remove();
+              }
+            }
+          });
+        }, i * 30);
+      }
+    }
+
+    // Enhanced birthday celebration with GSAP animations
+    function triggerCelebration() {
+      if (celebrationTriggered) return;
+      celebrationTriggered = true;
+
+      // Show celebration container first
+      gsap.set(birthdayCelebration, { opacity: 1 });
+
+      // Animate birthday text from bottom with scale
+      gsap.fromTo(birthdayText, 
+        { 
+          y: 40, 
+          scale: 0, 
+          opacity: 0 
+        }, 
+        { 
+          y: 0, 
+          scale: 1, 
+          opacity: 1, 
+          duration: 1.5, 
+          ease: "back.out(1.7)",
+          delay: 0.2
+        }
+      );
+
+      // Animate subtitle with delay
+      gsap.fromTo(birthdaySubtitle, 
+        { 
+          y: 30, 
+          scale: 0.8, 
+          opacity: 0 
+        }, 
+        { 
+          y: 0, 
+          scale: 1, 
+          opacity: 1, 
+          duration: 1.2, 
+          ease: "back.out(1.7)",
+          delay: 0.8
+        }
+      );
+
+      // Animate poppers with bounce effect
+      gsap.fromTo([popperLeft, popperRight], 
+        { 
+          scale: 0, 
+          rotation: -180, 
+          opacity: 0 
+        }, 
+        { 
+          scale: 1.2, 
+          rotation: 0, 
+          opacity: 1, 
+          duration: 0.8, 
+          ease: "back.out(2.5)",
+          stagger: 0.2,
+          delay: 1
+        }
+      );
+
+      // Create enhanced confetti
+      setTimeout(() => {
+        createConfetti();
+      }, 1200);
+
+      // Add continuous sparkle effects around text
+      const sparkleInterval = setInterval(() => {
+        if (birthdayCelebration.style.opacity === '0') {
+          clearInterval(sparkleInterval);
+          return;
+        }
+        
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const rect = birthdayText.getBoundingClientRect();
+            createSparkle(
+              rect.left + Math.random() * rect.width,
+              rect.top + Math.random() * rect.height
+            );
+          }, i * 100);
+        }
+      }, 500);
+
+      // Hide celebration after 7 seconds with smooth fade
+      setTimeout(() => {
+        gsap.to([birthdayCelebration, popperLeft, popperRight], {
+          opacity: 0,
+          scale: 0.8,
+          duration: 1.5,
+          ease: "power2.out"
+        });
+        celebrationTriggered = false;
+      }, 7000);
+    }
+
+    // Progress bar interaction
+    function updateProgress(clientX) {
+      const rect = progressTrack.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      
+      currentProgress = percentage;
+      progressFill.style.width = percentage + '%';
+      lovePercentage.textContent = Math.round(percentage) + '%';
+
+      // Trigger celebration at 100%
+      if (percentage >= 99 && !celebrationTriggered) {
+        triggerCelebration();
+      }
+    }
+
+    // Progress bar event handlers (same as before)
+    progressTrack.addEventListener('mousedown', (e) => {
+      isProgressDragging = true;
+      updateProgress(e.clientX);
+      e.stopPropagation();
+    });
+
+    progressHandle.addEventListener('mousedown', (e) => {
+      isProgressDragging = true;
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isProgressDragging) {
+        updateProgress(e.clientX);
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isProgressDragging = false;
+    });
+
+    // Touch events for progress bar
+    progressTrack.addEventListener('touchstart', (e) => {
+      isProgressDragging = true;
+      updateProgress(e.touches[0].clientX);
+      e.stopPropagation();
+    }, { passive: false });
+
+    progressHandle.addEventListener('touchstart', (e) => {
+      isProgressDragging = true;
+      e.stopPropagation();
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      if (isProgressDragging) {
+        updateProgress(e.touches[0].clientX);
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+      isProgressDragging = false;
+    });
+
+    progressTrack.addEventListener('click', (e) => {
+      if (!isProgressDragging) {
+        updateProgress(e.clientX);
+      }
+    });
+
+    // Heart balloon creation (same as before but with exclusions)
+    let heartCreationActive = false;
+    let lastTouchTime = 0;
+
+    function createHeartBalloon(x, y) {
+      if (!heartCreationActive) return;
+      
+      const hearts = ['❤️', '💖', '💕', '💗', '💝', '💘'];
+      const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+      
+      const heartCount = Math.floor(Math.random() * 3) + 2;
+      
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-balloon';
+        heart.innerHTML = randomHeart;
+        
+        const angle = (Math.PI * 2 * i) / heartCount + Math.random() * 0.5;
+        const radius = Math.random() * 25 + 10;
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        
+        heart.style.left = (x + offsetX) + 'px';
+        heart.style.top = (y + offsetY) + 'px';
+        heart.style.color = `hsl(${Math.random() * 60 + 300}, 80%, ${Math.random() * 30 + 60}%)`;
+        
+        document.body.appendChild(heart);
+        
+        gsap.to(heart, {
+          y: -Math.random() * 150 - 100,
+          x: (Math.random() - 0.5) * 100,
+          rotation: Math.random() * 360,
+          scale: Math.random() * 0.5 + 0.8,
+          duration: Math.random() * 2 + 2,
+          ease: "power2.out",
+          onComplete: () => {
+            if (heart && heart.parentNode) {
+              heart.remove();
+            }
+          }
+        });
+        
+        gsap.to(heart, {
+          opacity: 0,
+          duration: Math.random() * 1 + 2,
+          delay: Math.random() * 0.5
+        });
+      }
+    }
+
+    // Heart creation events (same as before)
+    let isMouseDown = false;
+    let startY = 0;
+    let currentY = 0;
+    let hasMoved = false;
+
+    document.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.love-progress-container') || isProgressDragging) return;
+      
+      isMouseDown = true;
+      startY = e.clientY;
+      hasMoved = false;
+      heartCreationActive = false;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isProgressDragging || e.target.closest('.love-progress-container')) return;
+      
+      if (isMouseDown) {
+        currentY = e.clientY;
+        const deltaY = Math.abs(currentY - startY);
+        
+        if (deltaY > 10) {
+          hasMoved = true;
+          heartCreationActive = true;
+          const now = Date.now();
+          if (now - lastTouchTime > 100) {
+            createHeartBalloon(e.clientX, e.clientY);
+            lastTouchTime = now;
+          }
+        }
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isMouseDown = false;
+      heartCreationActive = false;
+      setTimeout(() => { hasMoved = false; }, 100);
+    });
+
+    // Touch events for hearts
+    let touchStartY = 0;
+    let touchMoved = false;
+
+    document.addEventListener('touchstart', (e) => {
+      if (e.target.closest('.love-progress-container') || isProgressDragging) return;
+      
+      touchStartY = e.touches[0].clientY;
+      touchMoved = false;
+      heartCreationActive = false;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (isProgressDragging || e.target.closest('.love-progress-container')) return;
+      
+      const currentTouchY = e.touches[0].clientY;
+      const deltaY = Math.abs(currentTouchY - touchStartY);
+      
+      if (deltaY > 15) {
+        touchMoved = true;
+        heartCreationActive = true;
+        const now = Date.now();
+        if (now - lastTouchTime > 80) {
+          const touch = e.touches[0];
+          createHeartBalloon(touch.clientX, touch.clientY);
+          lastTouchTime = now;
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      heartCreationActive = false;
+      setTimeout(() => { touchMoved = false; }, 100);
+    }, { passive: true });
+
+    // Scroll animations for chapters (same as before)
+    gsap.utils.toArray('.chapter').forEach((chapter, index) => {
+      const content = chapter.querySelector('.chapter-content') || chapter;
+      const title = content.querySelector('.chapter-title, .story-title, .birthday-title');
+      const image = content.querySelector('.chapter-image, .couple-container');
+      const texts = content.querySelectorAll('.chapter-text, .story-info, .subtitle');
+      const interactives = content.querySelectorAll('.interactive-element');
+      
+      if (title) {
+        gsap.fromTo(title, 
+          { opacity: 0.3, y: 50, scale: 0.9 }, 
+          { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            duration: 1, 
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: chapter,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+      
+      if (image) {
+        gsap.fromTo(image, 
+          { opacity: 0.3, scale: 0.8, y: 30 }, 
+          { 
+            opacity: 1, 
+            scale: 1, 
+            y: 0,
+            duration: 1.2, 
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: chapter,
+              start: "top 70%",
+              end: "bottom 30%",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+      
+      if (texts.length > 0) {
+        gsap.fromTo(texts, 
+          { opacity: 0.3, y: 30 }, 
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.8, 
+            stagger: 0.15, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: chapter,
+              start: "top 60%",
+              end: "bottom 40%",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // Interactive elements hover enhancement
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if (!hasMoved && !touchMoved && !isProgressDragging) {
+            gsap.to(el, { 
+              scale: 1.05, 
+              y: -3, 
+              duration: 0.3, 
+              ease: "power2.out" 
+            });
+          }
+        });
+        
+        el.addEventListener('mouseleave', () => {
+          if (!hasMoved && !touchMoved && !isProgressDragging) {
+            gsap.to(el, { 
+              scale: 1, 
+              y: 0, 
+              duration: 0.3, 
+              ease: "power2.out" 
+            });
+          }
+        });
+      });
+    });
+
+    // Create regular floating hearts
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDelay = Math.random() * 3 + 's';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      
+      document.body.appendChild(heart);
+      
+      setTimeout(() => {
+        if (heart && heart.parentNode) {
+          heart.remove();
+        }
+      }, 8000);
+    }
+
+    // Create sparkles
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      sparkle.style.animationDelay = Math.random() * 1 + 's';
+      
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => {
+        if (sparkle && sparkle.parentNode) {
+          sparkle.remove();
+        }
+      }, 2000);
+    }
+
+    setInterval(createFloatingHeart, 2500);
+
+    // Music control
+    const audio = document.getElementById('bgAudio');
+    const musicBtn = document.getElementById('musicBtn');
+    const musicLabel = document.getElementById('musicLabel');
+    const musicIcon = document.getElementById('musicIcon');
+
+    function updateMusicUI(playing) {
+      if (playing) {
+        musicLabel.innerText = 'Pause';
+        musicIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect>';
+      } else {
+        musicLabel.innerText = 'Play';
+        musicIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+      }
+    }
+
+    musicBtn.addEventListener('click', async () => {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          updateMusicUI(true);
+        } catch (e) {
+          updateMusicUI(false);
+          console.log('Audio playback failed:', e);
+        }
+      } else {
+        audio.pause();
+        updateMusicUI(false);
+      }
+    });
+
+    // Main animations function called after curtain opens
+    function startMainAnimations() {
+      gsap.set('.story-title, .story-subtitle, .couple-container, .character-label, .love-progress-container, .love-quote', { opacity: 0.3 });
+      
+      gsap.timeline({ delay: 0.5 })
+        .to('.story-title', { opacity: 1, y: 0, duration: 1, ease: "power3.out" })
+        .to('.story-subtitle', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.7")
+        .to('.love-progress-container', { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.5")
+        .to('.couple-container', { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.7)" }, "-=0.6")
+        .to('.character-label', { opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)" }, "-=0.8")
+        .to('.love-quote', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.4");
+    }
+
+    updateMusicUI(false);
+
+    // Hide scroll indicator after first scroll
+    let hasScrolled = false;
+    const scrollIndicator = document.querySelector('#scrollIndicator');
+    
+    window.addEventListener('scroll', () => {
+      if (!hasScrolled && window.scrollY > 100) {
+        hasScrolled = true;
+        if (scrollIndicator) {
+          gsap.to(scrollIndicator, { opacity: 0, duration: 0.5 });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

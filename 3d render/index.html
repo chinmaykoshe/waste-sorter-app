@@ -34,6 +34,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
     <script>
+
         const canvas = document.querySelector('.draw');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -42,93 +43,96 @@
         const renderer = new THREE.WebGLRenderer({ canvas });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        let light = new THREE.DirectionalLight(0xffffff, 5);
+        let light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(0, 1, 1).normalize();
         scene.add(light);
 
         let ambientLight = new THREE.AmbientLight(0x404040); // soft white light
-        
         scene.add(ambientLight);
-
-        let ambientLight2 = new THREE.AmbientLight(0x404040, 0.5); // softer white light
-        scene.add(ambientLight2);
 
 
         // OrbitControls (global)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
 
-        // Optional: GLTF model
-
+        // GLTFLoader
         const loader = new THREE.GLTFLoader();
         let leftEye, rightEye;
 
-        loader.load('skull.glb', function (gltf) {
+        // Load skull model
+        loader.load('3D SELF MODEL1.glb', function (gltf) {
             const skull = gltf.scene;
-            skull.scale.set(10, 10, 10);
+            skull.scale.set(2, 2, 2);
             scene.add(skull);
-
-            // Load left eye
-            loader.load('human_eye.glb', function (gltfEye) {
-                leftEye = gltfEye.scene;
-                leftEye.scale.set(0.02, 0.02, 0.02);
-                skull.add(leftEye);
-                leftEye.position.set(-0.04, 0.11, 0.1);
-                leftEye.rotation.set(0, 0, 0);
+            loader.load('stylized_eye.glb', function (gltf) {
+                leftEye = gltf.scene;
+                leftEye.scale.set(0.2, 0.2, 0.2);
+                leftEye.position.set(0.28, 0.55, 0.55);
+                leftEye.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
+                scene.add(leftEye);
             });
 
-            // Load right eye
-            loader.load('human_eye.glb', function (gltfEye) {
-                rightEye = gltfEye.scene;
-                rightEye.scale.set(0.02, 0.02, 0.02);
-                skull.add(rightEye);
-                rightEye.position.set(0.04, 0.11, 0.1);
-                rightEye.rotation.set(0, 0, 0);
+            loader.load('stylized_eye.glb', function (gltf) {
+                rightEye = gltf.scene;
+                rightEye.scale.set(0.2, 0.2, 0.2);
+                rightEye.position.set(-0.31, 0.55, 0.55);
+                rightEye.rotation.set(0, THREE.MathUtils.degToRad(-90), 0);
+                scene.add(rightEye);
             });
-        });
+        })
 
-        
+        let SKULLROT = { x: 0, y: 0, z: 0 };
 
-        let mouseX = 0;
-        let mouseY = 0;
+        let baseLeftRotation = { x: 0, y: THREE.MathUtils.degToRad(-90), z: 0 };
+        let baseRightRotation = { x: 0, y: THREE.MathUtils.degToRad(-90), z: 0 };
 
-        window.addEventListener('mousemove', (e) => {
-            // normalize mouse from -1 to 1
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-
-            // rotate eyes using GSAP
-            if (leftEye && rightEye) {
-                gsap.to(leftEye.rotation, {
-                    x: -mouseY * 0.5,  // up/down rotation
-                    y: mouseX * 0.5,   // left/right rotation
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-                gsap.to(rightEye.rotation, {
-                    x: -mouseY * 0.5,
-                    y: mouseX * 0.5,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            }
-        });
-
-
+        // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); // for OrbitControls autoRotate
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
 
-
+        // Responsive resizing
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        window.addEventListener('mousemove', (e) => {
+
+            const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            const offsetX = -mouseY * 0.3;
+            const offsetY = mouseX * 0.3;
+
+            const targetRotation = {
+                x: baseLeftRotation.x + offsetX,
+                y: baseLeftRotation.y + offsetY
+            };
+
+            gsap.to(leftEye.rotation, {
+                x: targetRotation.x,
+                y: targetRotation.y,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+
+            gsap.to(rightEye.rotation, {
+                x: baseRightRotation.x + offsetX,
+                y: baseRightRotation.y + offsetY,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        });
+
+
     </script>
+
+
 </body>
 
 </html>
