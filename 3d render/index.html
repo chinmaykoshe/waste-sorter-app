@@ -42,12 +42,16 @@
         const renderer = new THREE.WebGLRenderer({ canvas });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        let light = new THREE.DirectionalLight(0xffffff, 1);
+        let light = new THREE.DirectionalLight(0xffffff, 5);
         light.position.set(0, 1, 1).normalize();
         scene.add(light);
 
         let ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+        
         scene.add(ambientLight);
+
+        let ambientLight2 = new THREE.AmbientLight(0x404040, 0.5); // softer white light
+        scene.add(ambientLight2);
 
 
         // OrbitControls (global)
