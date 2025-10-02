@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Clip-path Designer — Snap 45° & Edit Points</title>
+    <style>
+        :root {
+            --size: 600px;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f7f7f7;
+            color: #111;
+            padding: 18px;
+        }
+
+        h1 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+        }
+
+        .wrap {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        #editor {
+            width: var(--size);
+            height: var(--size);
+            background: #fff;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px;
+            border-radius: 6px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .toolbar button {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        svg.editor-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        circle.point {
+            fill: #1e90ff;
+            stroke: #fff;
+            stroke-width: 2;
+            r: 5;
+            cursor: pointer;
+        }
+
+        path.user-path {
+            fill: rgba(30, 144, 255, 0.06);
+            stroke: #1e90ff;
+            stroke-width: 2;
+            vector-effect: non-scaling-stroke;
+        }
+
+        line.preview-line {
+            stroke: #ff9800;
+            stroke-width: 2;
+            stroke-dasharray: 6 4;
+            pointer-events: none;
+        }
+
+        text.coord-label {
+            font-family: system-ui;
+            font-size: 12px;
+            fill: #222;
+            pointer-events: none;
+        }
+
+        .floating {
+            position: absolute;
+            transform: translate(-50%, -140%);
+            background: rgba(0, 0, 0, 0.78);
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 60;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 80ms;
+        }
+
+        .floating.show {
+            opacity: 1;
+        }
+
+        .preview {
+            width: var(--size);
+            height: var(--size);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            background: linear-gradient(135deg, #ff7f50, #1e90ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 700;
+            transition: clip-path 200ms ease;
+        }
+
+        .panel {
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        pre {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .hint {
+            color: #444;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Clip-path Designer — Snap 45° & Edit Points</h1>
+    <div class="wrap">
+        <div id="editor">
+            <div class="toolbar">
+                <button id="undoBtn">Undo</button>
+                <button id="closeBtn">Close & Apply</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+            <div id="floating" class="floating"></div>
+            <svg class="editor-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <g id="grid"></g>
+                <path class="user-path"></path>
+                <line id="previewLine" class="preview-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"></line>
+                <g id="pointsGroup"></g>
+                <g id="coordLabels"></g>
+            </svg>
+        </div>
+
+        <div class="panel">
+            <div class="preview" id="previewBox">Preview</div>
+            <div>
+                <div class="hint">Generated <code>clip-path</code> (click Close & Apply to apply to preview):</div>
+                <pre id="pathOutput">clip-path will appear here after closing the shape.</pre>
+            </div>
+            <div class="hint">Click to add points. Hover segments to see angle & coordinates. Click point to edit.
+                Right-click to undo. First point starts at x=0.</div>
+        </div>
+    </div>
+
+    <script>
+        const SIZE = 600, GRID_STEP = 10, SNAP_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315];
+        const editor = document.getElementById('editor'), svg = editor.querySelector('svg');
+        const gridG = svg.querySelector('#grid'), pathEl = svg.querySelector('path.user-path');
+        const previewLine = document.getElementById('previewLine'), pointsGroup = svg.querySelector('#pointsGroup');
+        const coordLabels = svg.querySelector('#coordLabels'), floating = document.getElementById('floating');
+        const previewBox = document.getElementById('previewBox'), pathOutput = document.getElementById('pathOutput');
+        const undoBtn = document.getElementById('undoBtn'), closeBtn = document.getElementById('closeBtn'), resetBtn = document.getElementById('resetBtn');
+
+        let points = [], editIndex = -1;
+
+        /* Build Grid */
+        (function buildGrid() {
+            for (let x = 0; x <= SIZE; x += GRID_STEP) {
+                const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                l.setAttribute('x1', x); l.setAttribute('y1', 0); l.setAttribute('x2', x); l.setAttribute('y2', SIZE);
+                l.setAttribute('stroke', (x % 100 === 0) ? '#ddd' : '#f0f0f0'); l.setAttribute('stroke-width', (x % 100 === 0) ? '1.2' : '0.8');
+                gridG.appendChild(l);
+            }
+            for (let y = 0; y <= SIZE; y += GRID_STEP) {
+                const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                l.setAttribute('x1', 0); l.setAttribute('y1', y); l.setAttribute('x2', SIZE); l.setAttribute('y2', y);
+                l.setAttribute('stroke', (y % 100 === 0) ? '#ddd' : '#f0f0f0'); l.setAttribute('stroke-width', (y % 100 === 0) ? '1.2' : '0.8');
+                gridG.appendChild(l);
+            }
+        })();
+
+        /* Helpers */
+        function snapCoord(v) { return Math.round(v / GRID_STEP) * GRID_STEP; }
+        function svgPointFromEvent(e) { const r = svg.getBoundingClientRect(); return { x: snapCoord((e.clientX - r.left) * (SIZE / r.width)), y: snapCoord((e.clientY - r.top) * (SIZE / r.height)) }; }
+        function angleBetween(a, b) { let deg = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI; if (deg < 0) deg += 360; return deg; }
+        function snapAngle(deg) { let best = deg, minDiff = 360; SNAP_ANGLES.forEach(a => { let d = Math.abs(deg - a); if (d < minDiff) { minDiff = d; best = a; } }); return Math.abs(deg - best) <= 3 ? best : Math.round(deg * 100) / 100; }
+        function updatePath() { if (!points.length) { pathEl.setAttribute('d', ''); pathOutput.textContent = 'Add points, then Close & Apply.'; return; } let d = `M ${points[0].x},${points[0].y}`; for (let i = 1; i < points.length; i++)d += ` L ${points[i].x},${points[i].y}`; pathEl.setAttribute('d', d); }
+        function renderPoints() { pointsGroup.innerHTML = ''; points.forEach((p, i) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('cx', p.x); c.setAttribute('cy', p.y); c.setAttribute('r', 5); c.setAttribute('class', 'point'); c.dataset.index = i; pointsGroup.appendChild(c); }); }
+        function renderCoordLabels() { coordLabels.innerHTML = ''; points.forEach(p => { const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text'); txt.setAttribute('x', p.x + 6); txt.setAttribute('y', p.y - 6); txt.setAttribute('class', 'coord-label'); txt.textContent = `(${p.x},${p.y})`; coordLabels.appendChild(txt); }); }
+
+        /* Add/Edit Points */
+        svg.addEventListener('click', e => {
+            if (editIndex !== -1) { editIndex = -1; return; }
+            const mouse = svgPointFromEvent(e);
+            let from = points.length ? points[points.length - 1] : { x: 0, y: 0 };
+            let angle = angleBetween(from, mouse); let snappedAngle = snapAngle(angle);
+            let dx = mouse.x - from.x, dy = mouse.y - from.y, L = Math.hypot(dx, dy);
+            let x = from.x + Math.round(L * Math.cos(snappedAngle * Math.PI / 180) / GRID_STEP) * GRID_STEP;
+            let y = from.y + Math.round(L * Math.sin(snappedAngle * Math.PI / 180) / GRID_STEP) * GRID_STEP;
+            points.push({ x, y });
+            updatePath(); renderPoints(); renderCoordLabels();
+        });
+
+        /* Hover preview line */
+        svg.addEventListener('mousemove', e => {
+            const mouse = svgPointFromEvent(e);
+            if (editIndex !== -1) {
+                points[editIndex] = mouse; updatePath(); renderPoints(); renderCoordLabels();
+                previewLine.style.display = 'none';
+                floating.textContent = `Editing Point (${mouse.x},${mouse.y})`;
+                const r = svg.getBoundingClientRect();
+                floating.style.left = `${r.left + (mouse.x / SIZE) * r.width}px`;
+                floating.style.top = `${r.top + (mouse.y / SIZE) * r.height}px`;
+                floating.classList.add('show'); return;
+            }
+            if (!points.length) return;
+            let from = points[points.length - 1]; let angle = angleBetween(from, mouse); let snappedAngle = snapAngle(angle);
+            let dx = mouse.x - from.x, dy = mouse.y - from.y, L = Math.hypot(dx, dy);
+            let x = from.x + Math.round(L * Math.cos(snappedAngle * Math.PI / 180) / GRID_STEP) * GRID_STEP;
+            let y = from.y + Math.round(L * Math.sin(snappedAngle * Math.PI / 180) / GRID_STEP) * GRID_STEP;
+            previewLine.style.display = 'block';
+            previewLine.setAttribute('x1', from.x); previewLine.setAttribute('y1', from.y);
+            previewLine.setAttribute('x2', x); previewLine.setAttribute('y2', y);
+            const r = svg.getBoundingClientRect();
+            floating.textContent = `Angle: ${snappedAngle}° — Coord: (${x},${y})`;
+            floating.style.left = `${r.left + (x / SIZE) * r.width}px`; floating.style.top = `${r.top + (y / SIZE) * r.height}px`;
+            floating.classList.add('show');
+        });
+
+        /* Click point to edit */
+        svg.addEventListener('mousedown', e => {
+            if (e.target.tagName === 'circle') { editIndex = parseInt(e.target.dataset.index); floating.classList.add('show'); }
+        });
+        svg.addEventListener('mouseup', e => { if (editIndex !== -1) editIndex = -1; });
+
+        /* Right-click undo */
+        svg.addEventListener('contextmenu', e => { e.preventDefault(); if (points.length > 0) { points.pop(); updatePath(); renderPoints(); renderCoordLabels(); } });
+
+        svg.addEventListener('mouseleave', () => { previewLine.style.display = 'none'; floating.classList.remove('show'); });
+
+        /* Toolbar buttons */
+        undoBtn.addEventListener('click', () => { if (points.length > 0) { points.pop(); updatePath(); renderPoints(); renderCoordLabels(); } });
+        resetBtn.addEventListener('click', () => { points = []; updatePath(); renderPoints(); renderCoordLabels(); previewBox.style.clipPath = ''; pathOutput.textContent = 'clip-path will appear here after closing the shape.'; });
+        closeBtn.addEventListener('click', () => { if (points.length < 3) { alert('Need at least 3 points to close.'); return; } let d = `M ${points[0].x},${points[0].y}`; for (let i = 1; i < points.length; i++)d += ` L ${points[i].x},${points[i].y}`; d += ' Z'; const clip = `path("${d}")`; previewBox.style.clipPath = clip; pathOutput.textContent = `clip-path: ${clip};\nSVG path: "${d}"`; });
+
+        updatePath(); renderPoints(); renderCoordLabels();
+    </script>
+</body>
+
+</html>
